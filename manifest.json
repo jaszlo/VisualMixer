@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "darkermode",
-    "description": "Transform any webpage into darkmode",
+    "name": "VisualMixer",
+    "description": "Make any webpage more pleasant to look at and readable.",
     "version": "1.0",
     "action": {
         "default_popup": "popup.html",

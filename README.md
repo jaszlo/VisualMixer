@@ -1,3 +1,3 @@
-# darkermode
-A Chrome extension that transforms any webpage into a dark mode
+# VisualMixer
+A Chrome extension that makes any webpage more pleasant to look at and readable.
 
