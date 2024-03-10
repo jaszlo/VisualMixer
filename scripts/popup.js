@@ -45,6 +45,7 @@ function triggerDarkModeStateSave() {
 document.addEventListener("DOMContentLoaded", () => {
     const darkModeToggle = document.getElementById("darkModeToggle");
     const darkModeStrength = document.getElementById("darkModeStrength");
+    const darkModeStrengthDisplay = document.getElementById("darkModeStrengthDisplay");
 
     darkModeToggle.addEventListener("change", () => {
         triggerDarkModeToggle(darkModeStrength.value / darkModeStrength.max);
@@ -53,27 +54,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     darkModeStrength.addEventListener("input", () => {
         triggerDarkModeStrengthUpdate(darkModeStrength.value / darkModeStrength.max);
+        darkModeStrengthDisplay.textContent = Math.round((darkModeStrength.value * 100) / darkModeStrength.max ) + "%";
     });
 
     darkModeStrength.addEventListener("change", () => {
         triggerDarkModeStrengthUpdate(darkModeStrength.value / darkModeStrength.max);
     });
 
-
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         chrome.tabs.sendMessage(tabs[0].id, { action: "getState" }, response => {
+            console.log(response);
             if (chrome.runtime.lastError) {
                 console.log(`Error: ${chrome.runtime.lastError.message}`);
             } else
 
             if (response && response.success) {
-                const isDarkMode = state.darkMode;
+                const isDarkMode = response.state.isDarkMode;
                 darkModeToggle.checked = isDarkMode;
                 darkModeStrength.disabled = !isDarkMode;
-                darkModeStrength.value = Math.round(state.strength * darkModeStrength.max);
+                
+                console.log(response.state.strength);
+                darkModeStrength.value = Math.round(response.state.strength * darkModeStrength.max);
             } else {
                 console.log(`Unexpected response: ${response}`)
             }
         });
     });
+
 });

@@ -28,22 +28,22 @@ function getCurrentState(callback) {
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     if (request.action === "toggleDarkMode") {
-        // Update and store state
         state.isDarkMode = !state.isDarkMode;
         state.strength = request.strength;
         saveCurrentState();
-        clientUpdateDarkMode(state.isDarkMode, request.strength);
+        clientUpdateDarkMode(state.isDarkMode, state.strength);
         sendResponse({ success: true });
+
     } else if (request.action === "updateDarkModeStrength") {
         clientUpdateDarkMode(state.isDarkMode, request.strength);
         sendResponse({ success: true });
+
     } else if (request.action === "saveState") {
         saveCurrentState();
         sendResponse({ success: true });
+
     } else if (request.action === "getState") {
-        getCurrentState((currentState) => {
-            sendResponse({ success: true, state: currentState});
-        });
+        sendResponse({ success: true, state: state});
     }
      else {
         sendResponse({ success: false });
