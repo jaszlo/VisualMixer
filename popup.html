@@ -114,13 +114,13 @@
   <script src="scripts/popup.js"></script>
 </head>
 <body>
-    <label style="align-items: center">
+    <label style="display: flex; flex-direction: column; align-items: center;">
         <p>Toggle Darkmode</p>
-        <input stlye="position: absolute; left: 60%; top: 40%" type="checkbox" id="darkModeToggle">
+        <input type="checkbox" id="darkModeToggle">
     </label>
     <div style="display: flex; justify-content: space-between; width: 100%;">
-        <span style="position: absolute; top: 15%; left: 10%">Off</span>
-        <span style="position: absolute; top: 15%; right: 10%">On</span>
+        <span style="position: absolute; top: 15%; left: 25%">Off</span>
+        <span style="position: absolute; top: 15%; right: 25%">On</span>
     </div>
 
     <label style="align-items: center">
@@ -128,41 +128,41 @@
         <input disabled="true" type="range" min="0" max="100" value="95" id="inverseStrength">
     </label>
     <div style="display: flex; justify-content: space-between; width: 100%;">
-        <span style="position: absolute; top: 33%; left: 12%">0%</span>
-        <span style="position: absolute; top: 33%; left: 40%" id="inverseStrengthDisplay">95%</span>
-        <span style="position: absolute; top: 33%; right: 10%">100%</span>
+        <span style="position: absolute; top: 26%; left: 12%">0%</span>
+        <span style="position: absolute; top: 26%; left: 40%" id="inverseStrengthDisplay">95%</span>
+        <span style="position: absolute; top: 26%; right: 10%">100%</span>
     </div>
 
-  <label style="align-items: center">
-      <p>Contrast Modifier</p>
-      <input type="range" min="0" max="400" value="100" id="contrastStrength">
-  </label>
-  <div style="display: flex; justify-content: space-between; width: 100%;">
-      <span style="position: absolute; top: 54%; left: 12%">0%</span>
-      <span style="position: absolute; top: 54%; left: 40%" id="contrastStrengthDisplay">100%</span>
-      <span style="position: absolute; top: 54%; right: 10%">400%</span>
-  </div>
+    <label style="align-items: center">
+        <p>Contrast Modifier</p>
+        <input type="range" min="0" max="400" value="100" id="contrastStrength">
+    </label>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+        <span style="position: absolute; top: 45%; left: 12%">0%</span>
+        <span style="position: absolute; top: 45%; left: 40%" id="contrastStrengthDisplay">100%</span>
+        <span style="position: absolute; top: 45%; right: 10%">400%</span>
+    </div>
 
-  <label style="align-items: center">
-    <p>Brightness Modifier</p>
-    <input type="range" min="0" max="400" value="100" id="brightnessStrength">
-</label>
-<div style="display: flex; justify-content: space-between; width: 100%;">
-    <span style="position: absolute; top: 75%; left: 12%">0%</span>
-    <span style="position: absolute; top: 75%; left: 40%" id="brightnessStrengthDisplay">100%</span>
-    <span style="position: absolute; top: 75%; right: 10%">400%</span>
-</div>
+    <label style="align-items: center">
+        <p>Brightness Modifier</p>
+        <input type="range" min="0" max="400" value="100" id="brightnessStrength">
+    </label>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+        <span style="position: absolute; top: 62.5%; left: 12%">0%</span>
+        <span style="position: absolute; top: 62.5%; left: 40%" id="brightnessStrengthDisplay">100%</span>
+        <span style="position: absolute; top: 62.5%; right: 10%">400%</span>
+    </div>
 
-<label style="align-items: center">
-  <p>Saturation Modifier</p>
-  <input type="range" min="0" max="400" value="100" id="saturationStrength">
-</label>
-<div style="display: flex; justify-content: space-between; width: 100%;">
-  <span style="position: absolute; top: 75%; left: 12%">0%</span>
-  <span style="position: absolute; top: 75%; left: 40%" id="saturationStrengthDisplay">100%</span>
-  <span style="position: absolute; top: 75%; right: 10%">400%</span>
-</div>
+    <label style="align-items: center">
+        <p>Saturation Modifier</p>
+        <input type="range" min="0" max="400" value="100" id="saturationStrength">
+    </label>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+        <span style="position: absolute; top: 80%; left: 12%">0%</span>
+        <span style="position: absolute; top: 80%; left: 40%" id="saturationStrengthDisplay">100%</span>
+        <span style="position: absolute; top: 80%; right: 10%">400%</span>
+    </div>
 
-  <button id="resetButton" class="button-27" role="button">Reset</button>
+  <button id="resetButton" class="button-27" style="scale: 0.8; margin-bottom: 2px" role="button">Reset</button>
 </body>
 </html>
