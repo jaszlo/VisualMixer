@@ -1,99 +1,93 @@
-<html>
-    <head>
-        <style>
-            body {
-                background-color: #111111;
-                color: black;
-                width: 215px;
-                height: 100px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Mode Toggle</title>
+  <style>
+    body {
+      background-color: #222222;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 200px;
+      margin: 0;
+    }
 
-            label {
-                color: #444444;
-            }
+    label {
+      margin-bottom: 10px;
+    }
 
-            /* The switch - the box around the slider */
-            .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-            }
+    input[type="checkbox"] {
+      appearance: none;
+      width: 40px;
+      height: 20px;
+      background-color: #000;
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+    }
 
-            /* Hide default HTML checkbox */
-            .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-            }
+    input[type="checkbox"]::before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+      position: absolute;
+      left: 0;
+      transition: transform 0.3s ease;
+    }
 
-            /* The slider */
-            .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            -webkit-transition: .4s;
-            transition: .4s;
-            }
+    input[type="checkbox"]:checked::before {
+      transform: translateX(20px);
+    }
 
-            .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-            }
+    input[type="range"] {
+      width: 100%;
+      margin-top: 5px;
+      cursor: pointer;
+      background: linear-gradient(to right, #000 0%, #000 100%);
+    }
 
-            input:checked + .slider {
-            background-color: #010101;
-            }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      background: #000;
+      border-radius: 50%;
+      cursor: pointer;
+    }
 
-            input:focus + .slider {
-            box-shadow: 0 0 1px #010101;
-            }
-
-            input:checked + .slider:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
-            transform: translateX(26px);
-            }
-
-            /* Rounded sliders */
-            .slider.round {
-                border-radius: 34px;
-            }
-            .slider.round:before {
-                border-radius: 50%;
-            }
-
-            p {
-                font-size: medium;
-                font-weight: bold;
-                padding: 10px;
-            }
-        </style>
-        <script src="popup.js"></script>
-    </head>
-    <body>
+    p {
+        color: black;
+        font-size: medium;
+        font-weight: bolder;
+    }
+  </style>
+  <script src="scripts/popup.js"></script>
+</head>
+<body>
+    <label style="align-items: center">
         <p>Toggle Darkmode</p>
-        <label class="switch">
-            <div>
-                <input type="checkbox" id="darkModeToggle">
-                <span class="slider round"></span>
-            </div>
-          </label>
-    </body>
+        <input stlye="position: absolute; left: 60%; top: 40%" type="checkbox" id="darkModeToggle">
+    </label>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+        <span style="position: absolute; top: 15%; left: 10%">Off</span>
+        <span style="position: absolute; top: 15%; right: 10%">On</span>
+    </div>
+
+    <label style="align-items: center">
+        <p>Filter Strength</p>
+        <input disabled="true" type="range" min="0" max="1000" value="950" id="darkModeStrength">
+    </label>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+        <span style="position: absolute; bottom: 12%; left: 12%">0%</span>
+        <span style="position: absolute; bottom: 12%; right: 10%">100%</span>
+    </div>
+</body>
 </html>

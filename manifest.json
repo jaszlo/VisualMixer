@@ -4,17 +4,18 @@
     "description": "Transform any webpage into darkmode",
     "version": "1.0",
     "action": {
-      "default_popup": "popup.html",
-      "default_icon": "icon.png"
+        "default_popup": "popup.html",
+        "default_icon": "icon.png"
     },
     "permissions": [
-      "activeTab"
+        "activeTab",
+        "storage"
     ],
     "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"],
-        "run_at": "document_idle"
-      }
+        {
+            "matches": ["<all_urls>"],
+            "js": ["scripts/content.js"],
+            "run_at": "document_end"
+        }
     ]
-  }
+}
