@@ -125,11 +125,11 @@
 
     <label style="align-items: center">
         <p>Inverse Strength</p>
-        <input disabled="true" type="range" min="0" max="1000" value="950" id="darkModeStrength">
+        <input disabled="true" type="range" min="0" max="100" value="95" id="inverseStrength">
     </label>
     <div style="display: flex; justify-content: space-between; width: 100%;">
         <span style="position: absolute; top: 33%; left: 12%">0%</span>
-        <span style="position: absolute; top: 33%; left: 40%" id="darkModeStrengthDisplay">95%</span>
+        <span style="position: absolute; top: 33%; left: 40%" id="inverseStrengthDisplay">95%</span>
         <span style="position: absolute; top: 33%; right: 10%">100%</span>
     </div>
 
@@ -151,6 +151,16 @@
     <span style="position: absolute; top: 75%; left: 12%">0%</span>
     <span style="position: absolute; top: 75%; left: 40%" id="brightnessStrengthDisplay">100%</span>
     <span style="position: absolute; top: 75%; right: 10%">400%</span>
+</div>
+
+<label style="align-items: center">
+  <p>Saturation Modifier</p>
+  <input type="range" min="0" max="400" value="100" id="saturationStrength">
+</label>
+<div style="display: flex; justify-content: space-between; width: 100%;">
+  <span style="position: absolute; top: 75%; left: 12%">0%</span>
+  <span style="position: absolute; top: 75%; left: 40%" id="saturationStrengthDisplay">100%</span>
+  <span style="position: absolute; top: 75%; right: 10%">400%</span>
 </div>
 
   <button id="resetButton" class="button-27" role="button">Reset</button>

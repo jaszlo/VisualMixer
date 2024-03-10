@@ -26,6 +26,16 @@ function triggerStateSave() {
     });
 }
 
+function setHUD(state) {
+    const isDarkMode = state.isDarkMode;
+    document.getElementById("darkModeToggle").checked = isDarkMode;
+    slider["inverse"].element.disabled = !isDarkMode;
+    sliderNames.forEach((name) => {
+        slider[name].element.value = state[name];
+        slider[name].display.textContent = state[name] + "%";
+    });
+}
+
 function triggerReset() {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         chrome.tabs.sendMessage(tabs[0].id, { action: "reset" }, response => {
@@ -38,19 +48,8 @@ function triggerReset() {
             }
         });
     });
-
-    getState((state) => {
-        console.log(state);
-        const isDarkMode = state.isDarkMode;
-        darkModeToggle.checked = isDarkMode;
-        darkModeStrength.disabled = !isDarkMode;
-        darkModeStrength.value = Math.round(state.strength * darkModeStrength.max);
-        darkModeStrengthDisplay.textContent = Math.round((darkModeStrength.value * 100) / darkModeStrength.max ) + "%";
-        contrastStrength.value = state.contrast;
-        contrastStrengthDisplay.textContent = contrastStrength.value + "%";
-        
-    });
-
+    // Reset POP-UP HUD to reflect the new state
+    getState(setHUD);
 }
 
 function getState(callback) {
@@ -70,59 +69,35 @@ function getState(callback) {
 }
 
 
+const sliderNames = ["inverse", "contrast", "brightness", "saturation"];
+let slider = {};
+
 document.addEventListener("DOMContentLoaded", () => {
     const resetButton = document.getElementById("resetButton");
     resetButton.onclick = triggerReset;
 
     const darkModeToggle = document.getElementById("darkModeToggle");
-    const darkModeStrength = document.getElementById("darkModeStrength");
-    const darkModeStrengthDisplay = document.getElementById("darkModeStrengthDisplay");
-
-    const contrastStrength = document.getElementById("contrastStrength");
-    const contrastStrengthDisplay = document.getElementById("contrastStrengthDisplay");
-
-    const brightnessStrength = document.getElementById("brightnessStrength");
-    const brightnessStrengthDisplay = document.getElementById("brightnessStrengthDisplay");
-
     darkModeToggle.addEventListener("change", () => {
-        darkModeStrength.disabled = !darkModeToggle.checked;
+        inverseStrength.disabled = !darkModeToggle.checked;
         triggerValueUpdate("isDarkMode", darkModeToggle.checked);
-    });
-
-    darkModeStrength.addEventListener("input", () => {
-        darkModeStrengthDisplay.textContent = Math.round((darkModeStrength.value * 100) / darkModeStrength.max ) + "%";
-        triggerValueUpdate("strength", darkModeStrength.value / darkModeStrength.max);
-    });
-    darkModeStrength.addEventListener("change", () => {
-        darkModeStrengthDisplay.textContent = Math.round((darkModeStrength.value * 100) / darkModeStrength.max ) + "%";
-        triggerValueUpdate("strength", darkModeStrength.value / darkModeStrength.max);
         triggerStateSave();
     });
 
-    contrastStrength.addEventListener("input", () => {
-        triggerValueUpdate("contrast", contrastStrength.value);
-        contrastStrengthDisplay.textContent = contrastStrength.value + "%";
-    });
-    contrastStrength.addEventListener("change", () => {
-        triggerValueUpdate("contrast", contrastStrength.value);
-        contrastStrengthDisplay.textContent = contrastStrength.value + "%";
-        triggerStateSave
+    sliderNames.forEach((name) => {
+        const sliderElement = document.getElementById(name + "Strength");
+        const displayElement = document.getElementById(name + "StrengthDisplay");
+        slider[name] = {element: sliderElement, display: displayElement};
+
+        sliderElement.addEventListener("input", () => {
+            triggerValueUpdate(name, sliderElement.value);
+            displayElement.textContent = sliderElement.value + "%";
+        });
+        sliderElement.addEventListener("change", () => {
+            triggerValueUpdate(name, sliderElement.value);
+            displayElement.textContent = sliderElement.value + "%";
+            triggerStateSave();
+        });
     });
 
-    brightnessStrength.addEventListener("input", () => {
-        triggerValueUpdate("brightness", brightnessStrength.value);
-        brightnessStrengthDisplay.textContent = brightnessStrength.value + "%";
-    });
-    brightnessStrength.addEventListener("change", () => {
-        triggerValueUpdate("brightness", brightnessStrength.value);
-        brightnessStrengthDisplay.textContent = brightnessStrength.value + "%";
-        triggerStateSave();
-    });
-
-    getState((state) => {
-        const isDarkMode = state.isDarkMode;
-        darkModeToggle.checked = isDarkMode;
-        darkModeStrength.disabled = !isDarkMode;
-        darkModeStrength.value = Math.round(state.strength * darkModeStrength.max);
-    });
+    getState(setHUD);
 });

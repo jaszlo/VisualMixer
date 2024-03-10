@@ -2,17 +2,19 @@
 // Local representation of the state
 var state = {
     "isDarkMode": false,
-    "strength": 0.95,
+    "inverse": 95,
     "contrast": 100,
     "brightness": 100,
+    "saturation": 100
 };
 
 const defaultState = () => {
     return {
         "isDarkMode": false,
-        "strength": 0.95,
+        "inverse": 95,
         "contrast": 100,
         "brightness": 100,
+        "saturation": 100
     };
 }
 
@@ -41,17 +43,20 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
      if (request.action === "updateValue") {
         state[request.name] = request.value;
         switch (request.name) {
-            case "isDarkMode":
-                clientUpdateDarkMode(state.isDarkMode, state.strength);
+            case "isDarkMode": 
+                clientUpdateDarkMode(state.isDarkMode, state.inverse);
                 break;
-            case "strength":
-                clientUpdateDarkMode(state.isDarkMode, state.strength);
+            case "inverse":
+                clientUpdateDarkMode(state.isDarkMode, state.inverse);
                 break;
             case "contrast":
                 clientUpdateContrast(state.contrast);
                 break;
             case "brightness":
                 clientUpdateBrightness(state.brightness);
+                break;
+            case "saturation":
+                clientUpdateSaturation(state.saturation);
                 break;
             default:
                 break;
@@ -66,9 +71,10 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         sendResponse({ success: true, state: state});
     } else if (request.action === "reset") {
         state = defaultState();
-        clientUpdateDarkMode(state.isDarkMode, state.strength);
+        clientUpdateDarkMode(state.isDarkMode, state.inverse);
         clientUpdateContrast(state.contrast);
         clientUpdateBrightness(state.brightness);
+        clientUpdateSaturation(state.saturation);
         saveCurrentState();
         sendResponse({ success: true });
 
@@ -81,7 +87,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 document.onreadystatechange = () => {
     getCurrentState((currentState) => {
         state = currentState;
-        clientUpdateDarkMode(state.isDarkMode, state.strength);
+        clientUpdateDarkMode(state.isDarkMode, state.inverse);
     });
 };
 
@@ -109,26 +115,25 @@ function clientUpdateBrightness(brightness) {
     }
 }
 
+function clientUpdateSaturation(saturation) {
+    let currentFilter = document.body.style.filter;
+    if (currentFilter.includes("saturate")) {
+        document.body.style.filter = currentFilter.replace(/saturate\(\d+%\)/, `saturate(${saturation}%)`);
+    } else {
+        document.body.style.filter += `saturate(${saturation}%)`;
+    }
 
-function clientUpdateDarkMode(darkMode, strength) {
-    elementColorDict = {};
+}
+
+
+function clientUpdateDarkMode(darkMode, inverse) {
     document.querySelectorAll("*").forEach(element => {
         elementColorDict[element] = getComputedStyle(element).backgroundColor;
     });
-    document.body.style.filter = darkMode ? `invert(${strength})` : "invert(0)";
-
-    document.querySelectorAll("*").forEach(element => {
-        let currentColor = getComputedStyle(element).backgroundColor;
-        if (elementColorDict[element] !== currentColor) {
-            return;
-        }
-        let invertedColor = invertColor(currentColor);
-        //element.style.backgroundColor = invertedColor;
-    });
-
+    document.body.style.filter = darkMode ? `invert(${inverse}%)` : "invert(0%)";
     // Reverse the filter for all exceptions
     document.querySelectorAll(elementExceptions).forEach(element => {
-        element.style.filter = !darkMode ? "invert(0)" : `invert(${strength})`;
+        element.style.filter = !darkMode ? "invert(0%)" : `invert(${inverse}%)`;
     });
 }
 
