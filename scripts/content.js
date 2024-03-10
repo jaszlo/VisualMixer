@@ -35,6 +35,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         sendResponse({ success: true });
 
     } else if (request.action === "updateDarkModeStrength") {
+        state.strength = request.strength;
         clientUpdateDarkMode(state.isDarkMode, request.strength);
         sendResponse({ success: true });
 

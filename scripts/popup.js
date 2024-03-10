@@ -59,10 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     darkModeStrength.addEventListener("change", () => {
         triggerDarkModeStrengthUpdate(darkModeStrength.value / darkModeStrength.max);
+        triggerDarkModeStateSave();
     });
 
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         chrome.tabs.sendMessage(tabs[0].id, { action: "getState" }, response => {
+            console.log("popup received state");
             console.log(response);
             if (chrome.runtime.lastError) {
                 console.log(`Error: ${chrome.runtime.lastError.message}`);
@@ -72,11 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const isDarkMode = response.state.isDarkMode;
                 darkModeToggle.checked = isDarkMode;
                 darkModeStrength.disabled = !isDarkMode;
-                
-                console.log(response.state.strength);
                 darkModeStrength.value = Math.round(response.state.strength * darkModeStrength.max);
             } else {
-                console.log(`Unexpected response: ${response}`)
+                console.log(`Unexpected response: ${response}`);
             }
         });
     });
