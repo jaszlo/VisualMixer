@@ -5,6 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dark Mode Toggle</title>
   <style>
+    .button-27 {
+      appearance: none;
+      background-color: #000000;
+      border: 2px solid #1A1A1A;
+      border-radius: 15px;
+      box-sizing: border-box;
+      color: #FFFFFF;
+      cursor: pointer;
+      display: inline-block;
+      font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+      font-size: 16px;
+      font-weight: 600;
+      line-height: normal;
+      margin: 0;
+      min-height: 60px;
+      min-width: 0;
+      outline: none;
+      padding: 16px 24px;
+      text-align: center;
+      text-decoration: none;
+      transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      width: 100%;
+      will-change: transform;
+    }
+
+    .button-27:disabled {
+      pointer-events: none;
+    }
+
+    .button-27:hover {
+      box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+      transform: translateY(-2px);
+    }
+
+    .button-27:active {
+      box-shadow: none;
+      transform: translateY(0);
+    }
+
     body {
       background-color: #222222;
       color: white;
@@ -82,13 +124,35 @@
     </div>
 
     <label style="align-items: center">
-        <p>Filter Strength</p>
+        <p>Inverse Strength</p>
         <input disabled="true" type="range" min="0" max="1000" value="950" id="darkModeStrength">
     </label>
     <div style="display: flex; justify-content: space-between; width: 100%;">
-        <span style="position: absolute; bottom: 12%; left: 12%">0%</span>
-        <span style="position: absolute; bottom: 12%; left: 40%" id="darkModeStrengthDisplay">95%</span>
-        <span style="position: absolute; bottom: 12%; right: 10%">100%</span>
+        <span style="position: absolute; top: 33%; left: 12%">0%</span>
+        <span style="position: absolute; top: 33%; left: 40%" id="darkModeStrengthDisplay">95%</span>
+        <span style="position: absolute; top: 33%; right: 10%">100%</span>
     </div>
+
+  <label style="align-items: center">
+      <p>Contrast Modifier</p>
+      <input type="range" min="0" max="400" value="100" id="contrastStrength">
+  </label>
+  <div style="display: flex; justify-content: space-between; width: 100%;">
+      <span style="position: absolute; top: 54%; left: 12%">0%</span>
+      <span style="position: absolute; top: 54%; left: 40%" id="contrastStrengthDisplay">100%</span>
+      <span style="position: absolute; top: 54%; right: 10%">400%</span>
+  </div>
+
+  <label style="align-items: center">
+    <p>Brightness Modifier</p>
+    <input type="range" min="0" max="400" value="100" id="brightnessStrength">
+</label>
+<div style="display: flex; justify-content: space-between; width: 100%;">
+    <span style="position: absolute; top: 75%; left: 12%">0%</span>
+    <span style="position: absolute; top: 75%; left: 40%" id="brightnessStrengthDisplay">100%</span>
+    <span style="position: absolute; top: 75%; right: 10%">400%</span>
+</div>
+
+  <button id="resetButton" class="button-27" role="button">Reset</button>
 </body>
 </html>

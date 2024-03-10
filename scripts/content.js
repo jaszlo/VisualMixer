@@ -2,8 +2,19 @@
 // Local representation of the state
 var state = {
     "isDarkMode": false,
-    "strength": 0.95
+    "strength": 0.95,
+    "contrast": 100,
+    "brightness": 100,
 };
+
+const defaultState = () => {
+    return {
+        "isDarkMode": false,
+        "strength": 0.95,
+        "contrast": 100,
+        "brightness": 100,
+    };
+}
 
 // State management
 function saveCurrentState() {
@@ -19,7 +30,7 @@ function saveCurrentState() {
 function getCurrentState(callback) {
     const currentURL = document.location.host;
     chrome.storage.sync.get(currentURL, (data) => {
-        const pageState = data[currentURL] || {"isDarkMode": false, "strength": 0.95};
+        const pageState = data[currentURL] || defaultState();
         callback(pageState);
     });
 }
@@ -27,16 +38,24 @@ function getCurrentState(callback) {
 
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-    if (request.action === "toggleDarkMode") {
-        state.isDarkMode = !state.isDarkMode;
-        state.strength = request.strength;
-        saveCurrentState();
-        clientUpdateDarkMode(state.isDarkMode, state.strength);
-        sendResponse({ success: true });
-
-    } else if (request.action === "updateDarkModeStrength") {
-        state.strength = request.strength;
-        clientUpdateDarkMode(state.isDarkMode, request.strength);
+     if (request.action === "updateValue") {
+        state[request.name] = request.value;
+        switch (request.name) {
+            case "isDarkMode":
+                clientUpdateDarkMode(state.isDarkMode, state.strength);
+                break;
+            case "strength":
+                clientUpdateDarkMode(state.isDarkMode, state.strength);
+                break;
+            case "contrast":
+                clientUpdateContrast(state.contrast);
+                break;
+            case "brightness":
+                clientUpdateBrightness(state.brightness);
+                break;
+            default:
+                break;
+        }
         sendResponse({ success: true });
 
     } else if (request.action === "saveState") {
@@ -45,8 +64,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
     } else if (request.action === "getState") {
         sendResponse({ success: true, state: state});
-    }
-     else {
+    } else if (request.action === "reset") {
+        state = defaultState();
+        clientUpdateDarkMode(state.isDarkMode, state.strength);
+        clientUpdateContrast(state.contrast);
+        clientUpdateBrightness(state.brightness);
+        saveCurrentState();
+        sendResponse({ success: true });
+
+    } else {
         sendResponse({ success: false });
     }
 });
@@ -64,6 +90,25 @@ document.onreadystatechange = () => {
 // Helper functions
 const elementExceptions = ["IMG", "VIDEO", "CANVAS", "SVG", "IFRAME", "EMBED", "OBJECT"];
 var elementColorDict = {};
+
+function clientUpdateContrast(contrast) {
+    let currentFilter = document.body.style.filter;
+    if (currentFilter.includes("contrast")) {
+        document.body.style.filter = currentFilter.replace(/contrast\(\d+%\)/, `contrast(${contrast}%)`);
+    } else {
+        document.body.style.filter += `contrast(${contrast}%)`;
+    }
+}
+
+function clientUpdateBrightness(brightness) {
+    let currentFilter = document.body.style.filter;
+    if (currentFilter.includes("brightness")) {
+        document.body.style.filter = currentFilter.replace(/brightness\(\d+%\)/, `brightness(${brightness}%)`);
+    } else {
+        document.body.style.filter += `brightness(${brightness}%)`;
+    }
+}
+
 
 function clientUpdateDarkMode(darkMode, strength) {
     elementColorDict = {};

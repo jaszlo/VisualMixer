@@ -1,6 +1,6 @@
-function triggerDarkModeToggle(strength) {
+function triggerValueUpdate(name, value) {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-        chrome.tabs.sendMessage(tabs[0].id, { action: "toggleDarkMode", strength: strength }, response => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "updateValue", name: name, value: value }, response => {
             if (chrome.runtime.lastError) {
                 console.log(`Error: ${chrome.runtime.lastError.message}`);
             } else
@@ -12,22 +12,7 @@ function triggerDarkModeToggle(strength) {
     });
 }
 
-
-function triggerDarkModeStrengthUpdate(strength) {
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-        chrome.tabs.sendMessage(tabs[0].id, { action: "updateDarkModeStrength", strength: strength }, response => {
-            if (chrome.runtime.lastError) {
-                console.log(`Error: ${chrome.runtime.lastError.message}`);
-            } else
-
-            if (!response || !response.success) {
-                console.log(`Unexpected response: ${response}`)
-            }
-        });
-    });
-}
-
-function triggerDarkModeStateSave() {
+function triggerStateSave() {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         chrome.tabs.sendMessage(tabs[0].id, { action: "saveState" }, response => {
             if (chrome.runtime.lastError) {
@@ -41,44 +26,103 @@ function triggerDarkModeStateSave() {
     });
 }
 
+function triggerReset() {
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "reset" }, response => {
+            if (chrome.runtime.lastError) {
+                console.log(`Error: ${chrome.runtime.lastError.message}`);
+            } else
 
-document.addEventListener("DOMContentLoaded", () => {
-    const darkModeToggle = document.getElementById("darkModeToggle");
-    const darkModeStrength = document.getElementById("darkModeStrength");
-    const darkModeStrengthDisplay = document.getElementById("darkModeStrengthDisplay");
-
-    darkModeToggle.addEventListener("change", () => {
-        triggerDarkModeToggle(darkModeStrength.value / darkModeStrength.max);
-        darkModeStrength.disabled = !darkModeToggle.checked;
+            if (!response || !response.success) {
+                console.log(`Unexpected response: ${response}`)
+            }
+        });
     });
 
-    darkModeStrength.addEventListener("input", () => {
-        triggerDarkModeStrengthUpdate(darkModeStrength.value / darkModeStrength.max);
+    getState((state) => {
+        console.log(state);
+        const isDarkMode = state.isDarkMode;
+        darkModeToggle.checked = isDarkMode;
+        darkModeStrength.disabled = !isDarkMode;
+        darkModeStrength.value = Math.round(state.strength * darkModeStrength.max);
         darkModeStrengthDisplay.textContent = Math.round((darkModeStrength.value * 100) / darkModeStrength.max ) + "%";
+        contrastStrength.value = state.contrast;
+        contrastStrengthDisplay.textContent = contrastStrength.value + "%";
+        
     });
 
-    darkModeStrength.addEventListener("change", () => {
-        triggerDarkModeStrengthUpdate(darkModeStrength.value / darkModeStrength.max);
-        triggerDarkModeStateSave();
-    });
+}
 
+function getState(callback) {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         chrome.tabs.sendMessage(tabs[0].id, { action: "getState" }, response => {
-            console.log("popup received state");
-            console.log(response);
             if (chrome.runtime.lastError) {
                 console.log(`Error: ${chrome.runtime.lastError.message}`);
             } else
 
             if (response && response.success) {
-                const isDarkMode = response.state.isDarkMode;
-                darkModeToggle.checked = isDarkMode;
-                darkModeStrength.disabled = !isDarkMode;
-                darkModeStrength.value = Math.round(response.state.strength * darkModeStrength.max);
+                callback(response.state);
             } else {
                 console.log(`Unexpected response: ${response}`);
             }
         });
     });
+}
 
+
+document.addEventListener("DOMContentLoaded", () => {
+    const resetButton = document.getElementById("resetButton");
+    resetButton.onclick = triggerReset;
+
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const darkModeStrength = document.getElementById("darkModeStrength");
+    const darkModeStrengthDisplay = document.getElementById("darkModeStrengthDisplay");
+
+    const contrastStrength = document.getElementById("contrastStrength");
+    const contrastStrengthDisplay = document.getElementById("contrastStrengthDisplay");
+
+    const brightnessStrength = document.getElementById("brightnessStrength");
+    const brightnessStrengthDisplay = document.getElementById("brightnessStrengthDisplay");
+
+    darkModeToggle.addEventListener("change", () => {
+        darkModeStrength.disabled = !darkModeToggle.checked;
+        triggerValueUpdate("isDarkMode", darkModeToggle.checked);
+    });
+
+    darkModeStrength.addEventListener("input", () => {
+        darkModeStrengthDisplay.textContent = Math.round((darkModeStrength.value * 100) / darkModeStrength.max ) + "%";
+        triggerValueUpdate("strength", darkModeStrength.value / darkModeStrength.max);
+    });
+    darkModeStrength.addEventListener("change", () => {
+        darkModeStrengthDisplay.textContent = Math.round((darkModeStrength.value * 100) / darkModeStrength.max ) + "%";
+        triggerValueUpdate("strength", darkModeStrength.value / darkModeStrength.max);
+        triggerStateSave();
+    });
+
+    contrastStrength.addEventListener("input", () => {
+        triggerValueUpdate("contrast", contrastStrength.value);
+        contrastStrengthDisplay.textContent = contrastStrength.value + "%";
+    });
+    contrastStrength.addEventListener("change", () => {
+        triggerValueUpdate("contrast", contrastStrength.value);
+        contrastStrengthDisplay.textContent = contrastStrength.value + "%";
+        triggerStateSave
+    });
+
+    brightnessStrength.addEventListener("input", () => {
+        triggerValueUpdate("brightness", brightnessStrength.value);
+        brightnessStrengthDisplay.textContent = brightnessStrength.value + "%";
+    });
+    brightnessStrength.addEventListener("change", () => {
+        triggerValueUpdate("brightness", brightnessStrength.value);
+        brightnessStrengthDisplay.textContent = brightnessStrength.value + "%";
+        triggerStateSave();
+    });
+
+    getState((state) => {
+        const isDarkMode = state.isDarkMode;
+        darkModeToggle.checked = isDarkMode;
+        darkModeStrength.disabled = !isDarkMode;
+        darkModeStrength.value = Math.round(state.strength * darkModeStrength.max);
+    });
 });
