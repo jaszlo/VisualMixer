@@ -9,7 +9,18 @@ var state = {
     "hueRotation": 0
 };
 
-const defaultState = () => {
+const units = {
+    "inverse": "%",
+    "contrast": "%",
+    "brightness": "%",
+    "saturation": "%",
+    "hueRotation": "deg"
+};
+
+const elementExceptions = ["IMG", "VIDEO", "CANVAS", "SVG", "IFRAME", "EMBED", "OBJECT"];
+
+
+function defaultState() {
     return {
         "isDarkMode": false,
         "inverse": 95,
@@ -42,6 +53,7 @@ function getCurrentState(callback) {
 
 function applyState(state) {
     clientUpdateDarkMode(state.isDarkMode, state.inverse);
+    // Should be refactored
     clientUpdateContrast(state.contrast);
     clientUpdateBrightness(state.brightness);
     clientUpdateSaturation(state.saturation);
@@ -68,7 +80,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             applyState(state);
             saveCurrentState();
             return sendResponse({ success: true });
-            
+
         default:
             return sendResponse({ success: false, message: "Unknown action" });
     }
@@ -108,7 +120,7 @@ function clientUpdateSaturation(saturation) {
         document.body.style.filter += `saturate(${saturation}%)`;
     }
 }
-const elementExceptions = ["IMG", "VIDEO", "CANVAS", "SVG", "IFRAME", "EMBED", "OBJECT"];
+
 
 function clientUpdateHueRotation(hueRotation) {
     let currentFilter = document.body.style.filter;
