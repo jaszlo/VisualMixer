@@ -21,7 +21,7 @@ A Chrome extension that allows you to make any webpage more pleasant to look at 
    - ssh   `git clone git@github.com:jaszlo/VisualMixer.git`
 
 2. **Add to Chrome:**
-   - Folow [this](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world?hl=de#load-unpacked offical guide on how to load an extension
+   - Folow [this](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world?hl=de#load-unpacked) offical guide on how to load an extension
   
 ## Gallery 
 
