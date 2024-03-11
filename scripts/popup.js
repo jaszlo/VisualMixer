@@ -69,7 +69,7 @@ function getState(callback) {
 }
 
 
-const sliderNames = ["inverse", "contrast", "brightness", "saturation"];
+const sliderNames = ["inverse", "contrast", "brightness", "saturation", "hueRotation"];
 let slider = {};
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -86,15 +86,16 @@ document.addEventListener("DOMContentLoaded", () => {
     sliderNames.forEach((name) => {
         const sliderElement = document.getElementById(name + "Strength");
         const displayElement = document.getElementById(name + "StrengthDisplay");
+        const unit = sliderElement.dataset.unit; 
         slider[name] = {element: sliderElement, display: displayElement};
 
         sliderElement.addEventListener("input", () => {
             triggerValueUpdate(name, sliderElement.value);
-            displayElement.textContent = sliderElement.value + "%";
+            displayElement.textContent = sliderElement.value + unit
         });
         sliderElement.addEventListener("change", () => {
             triggerValueUpdate(name, sliderElement.value);
-            displayElement.textContent = sliderElement.value + "%";
+            displayElement.textContent = sliderElement.value + unit
             triggerStateSave();
         });
     });

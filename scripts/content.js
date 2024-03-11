@@ -5,7 +5,8 @@ var state = {
     "inverse": 95,
     "contrast": 100,
     "brightness": 100,
-    "saturation": 100
+    "saturation": 100,
+    "hueRotation": 0
 };
 
 const defaultState = () => {
@@ -14,7 +15,8 @@ const defaultState = () => {
         "inverse": 95,
         "contrast": 100,
         "brightness": 100,
-        "saturation": 100
+        "saturation": 100,
+        "hueRotation": 0
     };
 }
 
@@ -58,6 +60,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             case "saturation":
                 clientUpdateSaturation(state.saturation);
                 break;
+            case "hueRotation":
+                clientUpdateHueRotation(state.hueRotation);
+                break;
             default:
                 break;
         }
@@ -75,6 +80,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         clientUpdateContrast(state.contrast);
         clientUpdateBrightness(state.brightness);
         clientUpdateSaturation(state.saturation);
+        clientUpdateHueRotation(state.hueRotation);
         saveCurrentState();
         sendResponse({ success: true });
 
@@ -90,12 +96,6 @@ document.onreadystatechange = () => {
         clientUpdateDarkMode(state.isDarkMode, state.inverse);
     });
 };
-
-
-
-// Helper functions
-const elementExceptions = ["IMG", "VIDEO", "CANVAS", "SVG", "IFRAME", "EMBED", "OBJECT"];
-var elementColorDict = {};
 
 function clientUpdateContrast(contrast) {
     let currentFilter = document.body.style.filter;
@@ -122,22 +122,30 @@ function clientUpdateSaturation(saturation) {
     } else {
         document.body.style.filter += `saturate(${saturation}%)`;
     }
+}
+const elementExceptions = ["IMG", "VIDEO", "CANVAS", "SVG", "IFRAME", "EMBED", "OBJECT"];
 
+function clientUpdateHueRotation(hueRotation) {
+    let currentFilter = document.body.style.filter;
+    if (currentFilter.includes("hue-rotate")) {
+        document.body.style.filter = currentFilter.replace(/hue-rotate\(\d+deg\)/, `hue-rotate(${hueRotation}deg)`);
+    } else {
+        document.body.style.filter += `hue-rotate(${hueRotation}deg)`;
+        console.log(document.body.style.filter)
+    }
+
+    // Remove hue rotation for all exceptions
+    document.querySelectorAll(elementExceptions).forEach(element => {
+        let currentFilter = element.style.filter;
+        element.style.filter = currentFilter.replace(/hue-rotate\(\d+deg\)/, `hue-rotate(${0}deg)`);
+    });
 }
 
-
+// Helper functions
 function clientUpdateDarkMode(darkMode, inverse) {
-    document.querySelectorAll("*").forEach(element => {
-        elementColorDict[element] = getComputedStyle(element).backgroundColor;
-    });
     document.body.style.filter = darkMode ? `invert(${inverse}%)` : "invert(0%)";
     // Reverse the filter for all exceptions
     document.querySelectorAll(elementExceptions).forEach(element => {
         element.style.filter = !darkMode ? "invert(0%)" : `invert(${inverse}%)`;
     });
-}
-
-function invertColor(color) {
-    rgbArray = color.match(/\d+/g);
-    return 'rgb(' + (255 - rgbArray[0]) + ', ' + (255 - rgbArray[1]) + ', ' + (255 - rgbArray[2]) + ')';
 }

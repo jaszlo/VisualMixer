@@ -119,49 +119,59 @@
         <input type="checkbox" id="darkModeToggle">
     </label>
     <div style="display: flex; justify-content: space-between; width: 100%;">
-        <span style="position: absolute; top: 15%; left: 25%">Off</span>
-        <span style="position: absolute; top: 15%; right: 25%">On</span>
+        <span style="position: absolute; top: 9%; left: 25%">Off</span>
+        <span style="position: absolute; top: 9%; right: 25%">On</span>
     </div>
 
     <label style="align-items: center">
         <p>Inverse Strength</p>
-        <input disabled="true" type="range" min="0" max="100" value="95" id="inverseStrength">
+        <input data-unit="%" disabled="true" type="range" min="0" max="100" value="95" id="inverseStrength">
     </label>
     <div style="display: flex; justify-content: space-between; width: 100%;">
-        <span style="position: absolute; top: 26%; left: 12%">0%</span>
-        <span style="position: absolute; top: 26%; left: 40%" id="inverseStrengthDisplay">95%</span>
-        <span style="position: absolute; top: 26%; right: 10%">100%</span>
+        <span style="position: absolute; top: 22%; left: 12%">0%</span>
+        <span style="position: absolute; top: 22%; left: 40%" id="inverseStrengthDisplay">95%</span>
+        <span style="position: absolute; top: 22%; right: 10%">100%</span>
     </div>
 
     <label style="align-items: center">
         <p>Contrast Modifier</p>
-        <input type="range" min="0" max="400" value="100" id="contrastStrength">
+        <input data-unit="%" type="range" min="0" max="400" value="100" id="contrastStrength">
     </label>
     <div style="display: flex; justify-content: space-between; width: 100%;">
-        <span style="position: absolute; top: 45%; left: 12%">0%</span>
-        <span style="position: absolute; top: 45%; left: 40%" id="contrastStrengthDisplay">100%</span>
-        <span style="position: absolute; top: 45%; right: 10%">400%</span>
+        <span style="position: absolute; top: 37%; left: 12%">0%</span>
+        <span style="position: absolute; top: 37%; left: 40%" id="contrastStrengthDisplay">100%</span>
+        <span style="position: absolute; top: 37%; right: 10%">400%</span>
     </div>
 
     <label style="align-items: center">
         <p>Brightness Modifier</p>
-        <input type="range" min="0" max="400" value="100" id="brightnessStrength">
+        <input data-unit="%" type="range" min="0" max="400" value="100" id="brightnessStrength">
     </label>
     <div style="display: flex; justify-content: space-between; width: 100%;">
-        <span style="position: absolute; top: 62.5%; left: 12%">0%</span>
-        <span style="position: absolute; top: 62.5%; left: 40%" id="brightnessStrengthDisplay">100%</span>
-        <span style="position: absolute; top: 62.5%; right: 10%">400%</span>
+        <span style="position: absolute; top: 52.5%; left: 12%">0%</span>
+        <span style="position: absolute; top: 52.5%; left: 40%" id="brightnessStrengthDisplay">100%</span>
+        <span style="position: absolute; top: 52.5%; right: 10%">400%</span>
     </div>
 
     <label style="align-items: center">
         <p>Saturation Modifier</p>
-        <input type="range" min="0" max="400" value="100" id="saturationStrength">
+        <input data-unit="%" type="range" min="0" max="400" value="100" id="saturationStrength">
     </label>
     <div style="display: flex; justify-content: space-between; width: 100%;">
-        <span style="position: absolute; top: 80%; left: 12%">0%</span>
-        <span style="position: absolute; top: 80%; left: 40%" id="saturationStrengthDisplay">100%</span>
-        <span style="position: absolute; top: 80%; right: 10%">400%</span>
+        <span style="position: absolute; top: 68%; left: 12%">0%</span>
+        <span style="position: absolute; top: 68%; left: 40%" id="saturationStrengthDisplay">100%</span>
+        <span style="position: absolute; top: 68%; right: 10%">400%</span>
     </div>
+
+    <label style="align-items: center">
+      <p>Hue-Rotation</p>
+      <input data-unit="°" type="range" min="0" max="360" value="0" id="hueRotationStrength">
+  </label>
+  <div style="display: flex; justify-content: space-between; width: 100%;">
+      <span style="position: absolute; top: 83%; left: 12%">0°</span>
+      <span style="position: absolute; top: 83%; left: 46%" id="hueRotationStrengthDisplay">0°</span>
+      <span style="position: absolute; top: 83%; right: 10%">360°</span>
+  </div>
 
   <button id="resetButton" class="button-27" style="scale: 0.8; margin-bottom: 2px" role="button">Reset</button>
 </body>
