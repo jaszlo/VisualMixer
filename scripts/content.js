@@ -50,46 +50,27 @@ function applyState(state) {
 
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-     if (request.action === "updateValue") {
-        state[request.name] = request.value;
-        switch (request.name) {
-            case "isDarkMode": 
-                clientUpdateDarkMode(state.isDarkMode, state.inverse);
-                break;
-            case "inverse":
-                clientUpdateDarkMode(state.isDarkMode, state.inverse);
-                break;
-            case "contrast":
-                clientUpdateContrast(state.contrast);
-                break;
-            case "brightness":
-                clientUpdateBrightness(state.brightness);
-                break;
-            case "saturation":
-                clientUpdateSaturation(state.saturation);
-                break;
-            case "hueRotation":
-                clientUpdateHueRotation(state.hueRotation);
-                break;
-            default:
-                break;
-        }
-        sendResponse({ success: true });
+    switch (request.action) {
+        case "updateValue":
+            state[request.name] = request.value;
+            applyState(state);
+            return sendResponse({ success: true });
 
-    } else if (request.action === "saveState") {
-        saveCurrentState();
-        sendResponse({ success: true });
+        case "saveState":
+            saveCurrentState();
+            return sendResponse({ success: true });
 
-    } else if (request.action === "getState") {
-        sendResponse({ success: true, state: state});
-    } else if (request.action === "reset") {
-        state = defaultState();
-        applyState(state);
-        saveCurrentState();
-        sendResponse({ success: true });
+        case "getState":
+            return sendResponse({ success: true, state: state });
 
-    } else {
-        sendResponse({ success: false });
+        case "reset":
+            state = defaultState();
+            applyState(state);
+            saveCurrentState();
+            return sendResponse({ success: true });
+            
+        default:
+            return sendResponse({ success: false, message: "Unknown action" });
     }
 });
 
