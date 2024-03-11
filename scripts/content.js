@@ -40,6 +40,14 @@ function getCurrentState(callback) {
 }
 
 
+function applyState(state) {
+    clientUpdateDarkMode(state.isDarkMode, state.inverse);
+    clientUpdateContrast(state.contrast);
+    clientUpdateBrightness(state.brightness);
+    clientUpdateSaturation(state.saturation);
+    clientUpdateHueRotation(state.hueRotation);
+}
+
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
      if (request.action === "updateValue") {
@@ -76,11 +84,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         sendResponse({ success: true, state: state});
     } else if (request.action === "reset") {
         state = defaultState();
-        clientUpdateDarkMode(state.isDarkMode, state.inverse);
-        clientUpdateContrast(state.contrast);
-        clientUpdateBrightness(state.brightness);
-        clientUpdateSaturation(state.saturation);
-        clientUpdateHueRotation(state.hueRotation);
+        applyState(state);
         saveCurrentState();
         sendResponse({ success: true });
 
@@ -93,7 +97,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 document.onreadystatechange = () => {
     getCurrentState((currentState) => {
         state = currentState;
-        clientUpdateDarkMode(state.isDarkMode, state.inverse);
+        applyState(state);
     });
 };
 

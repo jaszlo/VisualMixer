@@ -32,7 +32,7 @@ function setHUD(state) {
     slider["inverse"].element.disabled = !isDarkMode;
     sliderNames.forEach((name) => {
         slider[name].element.value = state[name];
-        slider[name].display.textContent = state[name] + "%";
+        slider[name].display.textContent = state[name] + slider[name].element.dataset.unit;
     });
 }
 
